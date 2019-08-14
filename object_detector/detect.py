@@ -57,6 +57,12 @@ def detect_multi(im,scale_size,min_wdw_sz,step_raw,clf):
 				detections.append((x,y,cdf,window_size[0],window_size[1]))		
 	return detections
 
+def coincide(rects):
+	tset = []
+	rec = rects.pop()
+	#for s in rects:
+	#	if 
+
 def save_wrong(im,found):
 	img_cut = im.copy()
 	img_cut = cv2.cvtColor(img_cut,cv2.COLOR_BGR2RGB)
@@ -107,6 +113,18 @@ def detector(filename):
 	t = end-start
 	print('用时',t,'秒')
 
+	if not os.path.exists(im_save_path):
+		os.makedirs(im_save_path)
+	count_save_fig = os.listdir(im_save_path)
+	if count_save_fig:
+		count_save_fig = [eval(i) for i in count_save_fig]
+		count_save_fig = max(count_save_fig)+1
+	else:
+		count_save_fig = 0
+	savefig_path = os.path.join(im_save_path,str(count_save_fig))
+	if not os.path.exists(savefig_path):
+		os.makedirs(savefig_path)
+
 	clone = cv2.cvtColor(im,cv2.COLOR_BGR2RGB)
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
@@ -114,15 +132,17 @@ def detector(filename):
 	for (x,y,_,w,h) in detections:
 		ax.add_patch(patches.Rectangle((x,y),w,h,color = 'y',linewidth = 3,fill = False))
 	plt.title("Raw Detection before NMS")
+	plt.savefig(f'{savefig_path}/{filename}_Before_NMS_{threshold}_{cdf_threshold}_{step_raw}.jpg')
 	plt.show()
 	
 	rects = np.array([[x, y, x + w, y + h] for (x, y, _, w, h) in detections])
 	rectsave = [[x,y,w,h] for (x,y,_,w,h) in detections]
+	
 	sc = [score[0] for (x, y, score, w, h) in detections]
 	print("sc: ", sc)
 	sc = np.array(sc)
 	pick = non_max_suppression(rects, probs = sc, overlapThresh = threshold)
-
+		
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	clone = cv2.cvtColor(im,cv2.COLOR_BGR2RGB)
@@ -130,6 +150,7 @@ def detector(filename):
 	for f in pick:
 		ax.add_patch(patches.Rectangle((f[0],f[1]),f[2]-f[0],f[3]-f[1],color = 'y',linewidth = 3,fill = False))
 	plt.title("Final Detections after applying NMS")
+	plt.savefig(f'{savefig_path}/{filename}_After_NMS_{threshold}_{cdf_threshold}_{step_raw}.jpg')
 	plt.show()
 
 	if swrong:

@@ -1,5 +1,6 @@
 pos_im_path = '../data/images/pos_person'
 neg_im_path = '../data/images/neg_person'
+sav_im_path = '../data/images/sav_person'
 win_size = (48,48)
 block_size = (16,16)
 block_stride = (8,8)
@@ -11,6 +12,6 @@ normalize = True
 pos_feat_ph = '../data/features/pos'
 neg_feat_ph = '../data/features/neg'
 model_path = '../data/models/'
-threshold = 0.1
+threshold = 0.3
 cdf_threshold = 0.9
 swrong = True
