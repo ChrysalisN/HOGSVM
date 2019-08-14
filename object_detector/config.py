@@ -1,0 +1,16 @@
+pos_im_path = '../data/images/pos_person'
+neg_im_path = '../data/images/neg_person'
+win_size = (48,48)
+block_size = (16,16)
+block_stride = (8,8)
+cell_size = (8,8)
+num_bins = 9
+img_avg = 120
+visualize = False
+normalize = True
+pos_feat_ph = '../data/features/pos'
+neg_feat_ph = '../data/features/neg'
+model_path = '../data/models/'
+threshold = 0.1
+cdf_threshold = 0.9
+swrong = True
